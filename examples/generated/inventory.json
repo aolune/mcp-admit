@@ -1,6 +1,6 @@
 {
   "schema_version": "mcp-admit.inventory.v1",
-  "tool_version": "0.3.0",
+  "tool_version": "0.3.1",
   "target": "examples\\client_configs",
   "total_servers": 4,
   "clients": [

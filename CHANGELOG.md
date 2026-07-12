@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.1 - 2026-07-12
+
+Release, onboarding, and supply-chain hardening.
+
+### Security
+
+- Pinned every GitHub Action dependency to a full commit SHA.
+- Made SARIF upload failures block push and tag workflows while keeping pull request
+  uploads tolerant of restricted tokens.
+- Added monthly Dependabot updates for GitHub Actions and Python dependencies.
+
+### Changed
+
+- Pinned GitHub install examples and Action usage to the `v0.3.1` release tag.
+- Made the quick demo self-contained with a versioned shallow checkout.
+- Added a GitHub Marketplace badge to the README.
+
 ## 0.3.0 - 2026-07-11
 
 Approval-aware admission and registry metadata release.

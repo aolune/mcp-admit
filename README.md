@@ -1,6 +1,7 @@
 # MCP Admit
 
 [![CI](https://github.com/aolune/mcp-admit/actions/workflows/ci.yml/badge.svg)](https://github.com/aolune/mcp-admit/actions/workflows/ci.yml)
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-MCP%20Admit-2ea44f?logo=github)](https://github.com/marketplace/actions/mcp-admit-admission-scan)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 
@@ -45,8 +46,13 @@ invalidates that approval when the definition drifts.
 
 ## Quick demo
 
-```powershell
-python -m mcp_admit scan examples/poisoned_tool_manifest.json
+Run the released version from a shallow checkout:
+
+```shell
+git clone --branch v0.3.1 --depth 1 https://github.com/aolune/mcp-admit.git
+cd mcp-admit
+python -m pip install .
+mcp-admit scan examples/poisoned_tool_manifest.json
 ```
 
 Example summary:
@@ -91,14 +97,14 @@ mcp-admit --version
 From GitHub with `pipx`:
 
 ```powershell
-pipx install git+https://github.com/aolune/mcp-admit.git
+pipx install "git+https://github.com/aolune/mcp-admit.git@v0.3.1"
 mcp-admit --version
 ```
 
 From GitHub with `uvx`:
 
 ```powershell
-uvx --from git+https://github.com/aolune/mcp-admit.git mcp-admit --version
+uvx --from "git+https://github.com/aolune/mcp-admit.git@v0.3.1" mcp-admit --version
 ```
 
 After a PyPI release:
@@ -289,7 +295,7 @@ Minimal workflow step:
 The repository also ships a composite action:
 
 ```yaml
-- uses: aolune/mcp-admit@v0.3.0
+- uses: aolune/mcp-admit@v0.3.1
   with:
     path: .
     profile: ci

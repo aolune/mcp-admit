@@ -362,7 +362,7 @@
           "type": "string"
         },
         "tool_version": {
-          "default": "0.3.0",
+          "default": "0.3.1",
           "title": "Tool Version",
           "type": "string"
         }
@@ -617,7 +617,7 @@
       "type": "string"
     },
     "tool_version": {
-      "default": "0.3.0",
+      "default": "0.3.1",
       "title": "Tool Version",
       "type": "string"
     }

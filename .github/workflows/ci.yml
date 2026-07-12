@@ -11,8 +11,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v3
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3
       - run: uv sync --extra dev || pip install -e ".[dev]"
       - run: uv run mcp-admit --version
       - run: uv run mcp-admit schema admission
@@ -27,7 +27,7 @@ jobs:
       - run: uv run --extra dev ruff check .
       - run: uv run --extra dev pytest
       - run: uv build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: mcp-admit-dist
@@ -40,8 +40,8 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v3
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3
       - run: uv sync --extra dev || pip install -e ".[dev]"
       - run: uv run python -m mcp_admit scan examples/safe_mcp_config.json --format json --fail-on high --out mcp-admit-report.json
       - run: uv run python -m mcp_admit scan examples/poisoned_tool_manifest.json --format sarif --out mcp-admit-report.sarif
@@ -52,13 +52,13 @@ jobs:
       - run: uv run python -m mcp_admit schema runtime-policy --out mcp-admit-runtime-policy.schema.json
       - run: uv run python -m mcp_admit schema audit --out mcp-admit-audit.schema.json
       - run: uv run python -m mcp_admit schema admission --out mcp-admit-admission.schema.json
-      - uses: github/codeql-action/upload-sarif@v4
+      - uses: github/codeql-action/upload-sarif@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4
         if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
-        continue-on-error: true
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
         with:
           sarif_file: mcp-admit-report.sarif
           category: mcp-admit-demo
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: mcp-admit-reports

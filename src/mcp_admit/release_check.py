@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import tomllib
 from pathlib import Path
 
@@ -16,6 +17,10 @@ from mcp_admit.models import (
     RuntimePolicyReport,
 )
 from mcp_admit.schemas import render_schema_json, schema_names
+
+
+ACTION_REF_PATTERN = re.compile(r"^\s*(?:-\s*)?uses:\s*([^\s#]+)", re.MULTILINE)
+PINNED_ACTION_REF_PATTERN = re.compile(r"^[^@\s]+@[0-9a-fA-F]{40}$")
 
 
 def _item(id: str, ok: bool, detail: str) -> ReleaseCheckItem:
@@ -85,6 +90,97 @@ def _check_action_metadata() -> ReleaseCheckItem:
     )
 
 
+def _check_action_pins() -> ReleaseCheckItem:
+    workflow_dir = Path(".github/workflows")
+    paths = [
+        Path("action.yml"),
+        *sorted(workflow_dir.glob("*.yml")),
+        *sorted(workflow_dir.glob("*.yaml")),
+    ]
+    unpinned: list[str] = []
+    for path in paths:
+        if not path.exists():
+            continue
+        for ref in ACTION_REF_PATTERN.findall(path.read_text(encoding="utf-8")):
+            if ref.startswith("./"):
+                continue
+            if not PINNED_ACTION_REF_PATTERN.fullmatch(ref):
+                unpinned.append(f"{path}: {ref}")
+    return _item(
+        "github.actions_pinned",
+        not unpinned,
+        "GitHub Action dependencies use full commit SHAs."
+        if not unpinned
+        else f"Unpinned GitHub Action dependencies: {', '.join(unpinned)}.",
+    )
+
+
+def _check_sarif_upload_policy() -> ReleaseCheckItem:
+    workflow_dir = Path(".github/workflows")
+    expected = "continue-on-error: ${{ github.event_name == 'pull_request' }}"
+    upload_workflows: list[Path] = []
+    invalid: list[str] = []
+    for path in sorted(workflow_dir.glob("*.y*ml")):
+        text = path.read_text(encoding="utf-8")
+        if "upload-sarif@" not in text:
+            continue
+        upload_workflows.append(path)
+        if expected not in text:
+            invalid.append(str(path))
+    ok = bool(upload_workflows) and not invalid
+    return _item(
+        "github.sarif_policy",
+        ok,
+        "SARIF upload failures block push and tag workflows."
+        if ok
+        else "SARIF upload is missing or remains tolerant outside pull requests"
+        + (f": {', '.join(invalid)}." if invalid else "."),
+    )
+
+
+def _check_dependabot() -> ReleaseCheckItem:
+    path = Path(".github/dependabot.yml")
+    if not path.exists():
+        return _item("github.dependabot", False, f"Missing {path}.")
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except yaml.YAMLError as exc:
+        return _item("github.dependabot", False, f"{path} is invalid YAML: {exc}")
+    updates = data.get("updates", []) if isinstance(data, dict) else []
+    ecosystems = {
+        item.get("package-ecosystem") for item in updates if isinstance(item, dict)
+    }
+    required = {"github-actions", "pip"}
+    ok = required <= ecosystems
+    return _item(
+        "github.dependabot",
+        ok,
+        "Dependabot covers GitHub Actions and Python dependencies."
+        if ok
+        else "Dependabot must cover GitHub Actions and Python dependencies.",
+    )
+
+
+def _check_readme_release_refs() -> ReleaseCheckItem:
+    path = Path("README.md")
+    if not path.exists():
+        return _item("readme.release_refs", False, "Missing README.md.")
+    text = path.read_text(encoding="utf-8")
+    tag = f"v{__version__}"
+    expected = {
+        f"git+https://github.com/aolune/mcp-admit.git@{tag}",
+        f"uses: aolune/mcp-admit@{tag}",
+    }
+    ok = all(value in text for value in expected)
+    return _item(
+        "readme.release_refs",
+        ok,
+        f"README install and Action examples reference {tag}."
+        if ok
+        else f"README install and Action examples must reference {tag}.",
+    )
+
+
 def _check_community_file(name: str) -> ReleaseCheckItem:
     path = Path(name)
     exists_and_nonempty = path.exists() and bool(
@@ -103,6 +199,10 @@ def build_release_check_report() -> ReleaseCheckReport:
     items = [
         _check_package_version(),
         _check_action_metadata(),
+        _check_action_pins(),
+        _check_sarif_upload_policy(),
+        _check_dependabot(),
+        _check_readme_release_refs(),
         _check_community_file("SECURITY.md"),
         _check_community_file("CONTRIBUTING.md"),
         *[_check_schema(name) for name in schema_names()],

@@ -1,6 +1,6 @@
 {
   "schema_version": "mcp-admit.admission.v1",
-  "tool_version": "0.3.0",
+  "tool_version": "0.3.1",
   "subject": {
     "target": "examples\\poisoned_tool_manifest.json",
     "server": "",
@@ -256,7 +256,7 @@
   ],
   "runtime_policy": {
     "schema_version": "mcp-admit.runtime-policy.v1",
-    "tool_version": "0.3.0",
+    "tool_version": "0.3.1",
     "target": "examples\\poisoned_tool_manifest.json",
     "source_schema_version": "mcp-admit.report.v1",
     "default_action": "deny",
@@ -391,12 +391,12 @@
   },
   "audit": {
     "schema_version": "mcp-admit.audit.v1",
-    "tool_version": "0.3.0",
+    "tool_version": "0.3.1",
     "target": "examples\\poisoned_tool_manifest.json",
     "gate_result": "fail",
     "runtime_policy": {
       "schema_version": "mcp-admit.runtime-policy.v1",
-      "tool_version": "0.3.0",
+      "tool_version": "0.3.1",
       "target": "examples\\poisoned_tool_manifest.json",
       "source_schema_version": "mcp-admit.report.v1",
       "default_action": "deny",

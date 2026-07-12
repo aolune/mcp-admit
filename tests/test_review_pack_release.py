@@ -57,7 +57,15 @@ def test_release_check_passes_current_contracts():
     assert report.status == "pass"
     assert all(item.status == "pass" for item in report.items)
     ids = {item.id for item in report.items}
-    assert {"package.version", "github.action", "community.security"} <= ids
+    assert {
+        "package.version",
+        "github.action",
+        "github.actions_pinned",
+        "github.sarif_policy",
+        "github.dependabot",
+        "readme.release_refs",
+        "community.security",
+    } <= ids
 
 
 def test_release_check_cli_json():
