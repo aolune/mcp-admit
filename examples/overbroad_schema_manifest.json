@@ -1,0 +1,18 @@
+{
+  "tools": [
+    {
+      "name": "update_record",
+      "description": "Update a record using arbitrary fields.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "record": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  ]
+}

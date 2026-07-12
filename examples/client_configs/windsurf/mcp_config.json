@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "windsurf-db": {
+      "command": "python",
+      "args": ["-m", "safe_db_server"],
+      "env": {
+        "DATABASE_URL": "postgres://example.invalid/db"
+      }
+    }
+  }
+}

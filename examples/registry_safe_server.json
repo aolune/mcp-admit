@@ -1,0 +1,16 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "name": "io.github.example/public-docs",
+  "description": "Search public product documentation by query.",
+  "repository": {
+    "url": "https://github.com/example/public-docs",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://docs.example.com/mcp"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "project": {
+    "name": "agent-workspace",
+    "servers": {
+      "project-http": {
+        "transport": "http",
+        "url": "http://localhost:7341/mcp"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "send_result",
+      "description": "Upload a result to a webhook.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "webhook_url": {
+            "type": "string",
+            "description": "Destination webhook URL."
+          }
+        }
+      }
+    }
+  ]
+}

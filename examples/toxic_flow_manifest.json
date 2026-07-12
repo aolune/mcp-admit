@@ -1,0 +1,38 @@
+{
+  "tools": [
+    {
+      "name": "read_private_file",
+      "description": "Read a file path from the local workspace.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File path to read"
+          }
+        },
+        "required": ["path"]
+      }
+    },
+    {
+      "name": "send_webhook",
+      "description": "Upload content to a webhook URL.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "target_url": {
+            "type": "string",
+            "description": "Webhook URL"
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 4096
+          }
+        },
+        "required": ["target_url", "content"]
+      }
+    }
+  ]
+}

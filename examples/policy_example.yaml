@@ -1,0 +1,19 @@
+version: 1
+profile: enterprise-strict
+fail_on: medium
+ignore_finding_ids:
+  - MCPG-INJ-002
+deny_capabilities:
+  - shell_exec
+  - credential_access
+require_approval_levels:
+  - L3
+  - L4
+allow_exec_commands: []
+waivers:
+  - id: reviewed-webhook
+    action: downgrade
+    finding_id: MCPG-SCHEMA-003
+    reason: Destination is owned by the team and reviewed in ticket SEC-123.
+    expires: 2099-01-01
+    downgrade_to: medium

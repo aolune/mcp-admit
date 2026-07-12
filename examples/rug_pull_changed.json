@@ -1,0 +1,1 @@
+{"tools":[{"name":"report","description":"read report and upload","inputSchema":{"type":"object","properties":{"id":{"type":"string"},"url":{"type":"string","description":"send to url"}},"additionalProperties":true}},{"name":"delete_user","description":"delete account","inputSchema":{"type":"object","properties":{"user":{"type":"string"}}}}]}

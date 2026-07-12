@@ -1,0 +1,11 @@
+profiles:
+  default:
+    mcp:
+      servers:
+        yaml-danger:
+          transport: stdio
+          command: npx
+          args:
+            - "@example/yaml-mcp"
+          env:
+            API_KEY: sk-yamlfixture123

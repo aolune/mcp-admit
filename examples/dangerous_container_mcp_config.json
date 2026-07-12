@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "host-control": {
+      "transport": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "--privileged",
+        "--network",
+        "host",
+        "-v",
+        "/var/run/docker.sock:/var/run/docker.sock",
+        "-v",
+        "/:/host",
+        "example/mcp-admin:latest"
+      ]
+    }
+  }
+}

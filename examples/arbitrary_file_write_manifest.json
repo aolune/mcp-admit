@@ -1,0 +1,21 @@
+{
+  "tools": [
+    {
+      "name": "write_file",
+      "description": "Write or overwrite a local file.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File path to write."
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": ["path", "content"]
+      }
+    }
+  ]
+}

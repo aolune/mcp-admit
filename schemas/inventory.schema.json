@@ -1,0 +1,351 @@
+{
+  "$defs": {
+    "ApprovalDecision": {
+      "properties": {
+        "approval_id": {
+          "default": "",
+          "title": "Approval Id",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "approved",
+            "pending",
+            "unknown",
+            "expired",
+            "drifted"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "reason"
+      ],
+      "title": "ApprovalDecision",
+      "type": "object"
+    },
+    "DiscoveredServer": {
+      "properties": {
+        "client": {
+          "title": "Client",
+          "type": "string"
+        },
+        "command": {
+          "default": "",
+          "title": "Command",
+          "type": "string"
+        },
+        "env_keys": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Env Keys",
+          "type": "array"
+        },
+        "location": {
+          "title": "Location",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "package": {
+          "default": "",
+          "title": "Package",
+          "type": "string"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "transport": {
+          "default": "unknown",
+          "title": "Transport",
+          "type": "string"
+        },
+        "url": {
+          "default": "",
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "client",
+        "source",
+        "name",
+        "location"
+      ],
+      "title": "DiscoveredServer",
+      "type": "object"
+    },
+    "InventoryServerReport": {
+      "properties": {
+        "approval": {
+          "$ref": "#/$defs/ApprovalDecision"
+        },
+        "capabilities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Capabilities",
+          "type": "array"
+        },
+        "definition_hash": {
+          "title": "Definition Hash",
+          "type": "string"
+        },
+        "finding_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Finding Ids",
+          "type": "array"
+        },
+        "server": {
+          "$ref": "#/$defs/DiscoveredServer"
+        },
+        "summary": {
+          "$ref": "#/$defs/ScanSummary"
+        }
+      },
+      "required": [
+        "server",
+        "summary",
+        "definition_hash"
+      ],
+      "title": "InventoryServerReport",
+      "type": "object"
+    },
+    "PolicyDecision": {
+      "properties": {
+        "action": {
+          "enum": [
+            "allow",
+            "allow_with_constraints",
+            "require_approval",
+            "deny",
+            "quarantine"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "network": {
+          "default": "allow",
+          "enum": [
+            "allow",
+            "restricted",
+            "deny"
+          ],
+          "title": "Network",
+          "type": "string"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "require_approval": {
+          "default": false,
+          "title": "Require Approval",
+          "type": "boolean"
+        },
+        "sandbox": {
+          "default": false,
+          "title": "Sandbox",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "title": "PolicyDecision",
+      "type": "object"
+    },
+    "RiskFactor": {
+      "properties": {
+        "capabilities": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Capabilities",
+          "type": "array"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "occurrences": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Occurrences",
+          "type": "integer"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "score": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Score",
+          "type": "integer"
+        },
+        "source_finding_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Finding Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "score",
+        "reason"
+      ],
+      "title": "RiskFactor",
+      "type": "object"
+    },
+    "ScanSummary": {
+      "properties": {
+        "approval_required": {
+          "title": "Approval Required",
+          "type": "boolean"
+        },
+        "credential_review_required": {
+          "title": "Credential Review Required",
+          "type": "boolean"
+        },
+        "egress_review_required": {
+          "title": "Egress Review Required",
+          "type": "boolean"
+        },
+        "gate_result": {
+          "enum": [
+            "pass",
+            "warn",
+            "fail"
+          ],
+          "title": "Gate Result",
+          "type": "string"
+        },
+        "max_severity": {
+          "enum": [
+            "info",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ],
+          "title": "Max Severity",
+          "type": "string"
+        },
+        "recommended_policy": {
+          "$ref": "#/$defs/PolicyDecision"
+        },
+        "risk_factors": {
+          "items": {
+            "$ref": "#/$defs/RiskFactor"
+          },
+          "title": "Risk Factors",
+          "type": "array"
+        },
+        "risk_score": {
+          "title": "Risk Score",
+          "type": "integer"
+        },
+        "risk_score_method": {
+          "const": "max_finding_with_composition",
+          "default": "max_finding_with_composition",
+          "title": "Risk Score Method",
+          "type": "string"
+        },
+        "sandbox_required": {
+          "title": "Sandbox Required",
+          "type": "boolean"
+        },
+        "tool_risk_level": {
+          "enum": [
+            "L0",
+            "L1",
+            "L2",
+            "L3",
+            "L4"
+          ],
+          "title": "Tool Risk Level",
+          "type": "string"
+        },
+        "total_findings": {
+          "title": "Total Findings",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "total_findings",
+        "max_severity",
+        "risk_score",
+        "tool_risk_level",
+        "gate_result",
+        "approval_required",
+        "sandbox_required",
+        "egress_review_required",
+        "credential_review_required",
+        "recommended_policy"
+      ],
+      "title": "ScanSummary",
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/aolune/mcp-admit/schemas/inventory.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "clients": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Clients",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "mcp-admit.inventory.v1",
+      "default": "mcp-admit.inventory.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "servers": {
+      "items": {
+        "$ref": "#/$defs/InventoryServerReport"
+      },
+      "title": "Servers",
+      "type": "array"
+    },
+    "target": {
+      "title": "Target",
+      "type": "string"
+    },
+    "tool_version": {
+      "default": "0.3.0",
+      "title": "Tool Version",
+      "type": "string"
+    },
+    "total_servers": {
+      "title": "Total Servers",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "target",
+    "total_servers"
+  ],
+  "title": "MCP Admit Inventory Report",
+  "type": "object"
+}

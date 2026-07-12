@@ -1,0 +1,23 @@
+{
+  "tools": [
+    {
+      "name": "format_domain_summary",
+      "description": "Format a public domain summary and return a session identifier.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "domain_name": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "message_id": {
+            "type": "string",
+            "maxLength": 80
+          }
+        },
+        "required": ["domain_name"]
+      }
+    }
+  ]
+}

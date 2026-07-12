@@ -1,0 +1,205 @@
+version: 1
+fixtures:
+  - name: safe readonly docs
+    target: examples/safe_readonly_docs_manifest.json
+    expect:
+      gate: pass
+      risk_level: L0
+      max_severity: info
+      contains_findings: []
+
+  - name: benign metadata vocabulary
+    target: examples/benign_metadata_manifest.json
+    expect:
+      gate: pass
+      risk_level: L0
+      max_severity: info
+      contains_findings: []
+
+  - name: safe official registry remote
+    target: examples/registry_safe_server.json
+    expect:
+      gate: pass
+      risk_level: L0
+      max_severity: info
+      contains_findings: []
+
+  - name: risky official registry package
+    target: examples/registry_risky_server.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-FLOW-003
+        - MCPG-SC-008
+        - MCPG-SC-010
+        - MCPG-SECRET-003
+        - MCPG-STDIO-001
+
+  - name: dangerous stdio config
+    target: examples/dangerous_stdio_config.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-STDIO-003
+        - MCPG-SECRET-001
+        - MCPG-NET-002
+
+  - name: dangerous container config
+    target: examples/dangerous_container_mcp_config.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-STDIO-004
+        - MCPG-STDIO-005
+        - MCPG-STDIO-006
+        - MCPG-STDIO-007
+
+  - name: nested mcp config
+    target: examples/nested_mcp_config.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-STDIO-003
+
+  - name: yaml mcp config
+    target: examples/yaml_mcp_config.yaml
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-FLOW-003
+        - MCPG-STDIO-002
+        - MCPG-SECRET-001
+
+  - name: mixed project config
+    target: examples/mixed_project_config.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: high
+      contains_findings:
+        - MCPG-NET-002
+        - MCPG-SCHEMA-003
+
+  - name: credential env config
+    target: examples/credential_env_mcp_config.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-FLOW-003
+        - MCPG-SECRET-001
+        - MCPG-SECRET-002
+
+  - name: poisoned tool metadata
+    target: examples/poisoned_tool_manifest.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-INJ-001
+        - MCPG-SCHEMA-004
+        - MCPG-CAP-004
+
+  - name: arbitrary file read
+    target: examples/arbitrary_file_read_manifest.json
+    expect:
+      gate: fail
+      risk_level: L3
+      max_severity: high
+      contains_findings:
+        - MCPG-SCHEMA-002
+
+  - name: arbitrary file write
+    target: examples/arbitrary_file_write_manifest.json
+    expect:
+      gate: fail
+      risk_level: L3
+      max_severity: high
+      contains_findings:
+        - MCPG-CAP-003
+        - MCPG-SCHEMA-002
+
+  - name: dangerous shell tool
+    target: examples/dangerous_shell_tool_manifest.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-CAP-001
+        - MCPG-SCHEMA-004
+
+  - name: network exfil tool
+    target: examples/network_exfil_tool_manifest.json
+    expect:
+      gate: fail
+      risk_level: L3
+      max_severity: high
+      contains_findings:
+        - MCPG-SCHEMA-003
+
+  - name: toxic read and outbound flow
+    target: examples/toxic_flow_manifest.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-FLOW-001
+        - MCPG-SCHEMA-002
+        - MCPG-SCHEMA-003
+
+  - name: overbroad schema
+    target: examples/overbroad_schema_manifest.json
+    expect:
+      gate: warn
+      risk_level: L2
+      max_severity: medium
+      contains_findings:
+        - MCPG-SCHEMA-001
+
+  - name: broad sensitive capabilities
+    target: examples/broad_capabilities_manifest.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-SCHEMA-006
+        - MCPG-SCHEMA-010
+        - MCPG-SCHEMA-011
+
+  - name: supply chain stdio config
+    target: examples/supply_chain_stdio_config.json
+    expect:
+      gate: fail
+      risk_level: L4
+      max_severity: critical
+      contains_findings:
+        - MCPG-STDIO-002
+        - MCPG-STDIO-008
+        - MCPG-NET-003
+
+  - name: rug pull drift
+    baseline: examples/rug_pull_baseline.json
+    target: examples/rug_pull_changed.json
+    expect:
+      gate: fail
+      risk_level: L3
+      max_severity: high
+      contains_findings:
+        - MCPG-SC-001
+        - MCPG-SC-002
+        - MCPG-SC-003

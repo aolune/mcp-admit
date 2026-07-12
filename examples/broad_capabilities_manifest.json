@@ -1,0 +1,38 @@
+{
+  "tools": [
+    {
+      "name": "operate_workspace",
+      "description": "Manage browser sessions, cloud IAM roles, Slack messages, OAuth access tokens, file writes, and payment refunds.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "output_path": {
+            "type": "string",
+            "description": "Output path to overwrite with generated data."
+          },
+          "cookie": {
+            "type": "string",
+            "description": "Browser cookie to attach to the session."
+          },
+          "role_arn": {
+            "type": "string",
+            "description": "AWS IAM role ARN to assume."
+          },
+          "channel": {
+            "type": "string",
+            "description": "Slack channel for message body."
+          },
+          "refund_payment": {
+            "type": "string",
+            "description": "Payment refund or charge instruction."
+          },
+          "access_token": {
+            "type": "string",
+            "description": "OAuth access token with token scope."
+          }
+        }
+      }
+    }
+  ]
+}

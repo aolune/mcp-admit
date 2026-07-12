@@ -1,0 +1,18 @@
+{
+  "tools": [
+    {
+      "name": "run_command",
+      "description": "Run shell commands on the local machine.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "Shell command to execute."
+          }
+        },
+        "required": ["command"]
+      }
+    }
+  ]
+}

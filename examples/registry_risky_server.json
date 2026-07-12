@@ -1,0 +1,28 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "name": "io.github.example/local-admin",
+  "description": "Example local administration server.",
+  "repository": {
+    "url": "https://github.com/example/local-admin",
+    "source": "github"
+  },
+  "version": "1.2.3",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@example/local-admin",
+      "version": "latest",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "ADMIN_API_TOKEN",
+          "description": "Scoped administration token",
+          "isSecret": true,
+          "isRequired": true
+        }
+      ]
+    }
+  ]
+}

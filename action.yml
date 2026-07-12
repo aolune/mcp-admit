@@ -1,0 +1,80 @@
+name: MCP Admit admission scan
+description: Static-first, no-exec-by-default admission control for MCP servers and agent tools.
+
+inputs:
+  path:
+    description: File or directory to scan.
+    required: false
+    default: .
+  profile:
+    description: Built-in policy profile.
+    required: false
+    default: ci
+  policy:
+    description: Optional repository policy file.
+    required: false
+    default: ""
+  fail-on:
+    description: Finding severity that fails the step.
+    required: false
+    default: high
+  format:
+    description: Report format (markdown, json, or sarif).
+    required: false
+    default: sarif
+  output:
+    description: Report output path.
+    required: false
+    default: mcp-admit-report.sarif
+  include:
+    description: Newline-separated include patterns.
+    required: false
+    default: ""
+  exclude:
+    description: Newline-separated exclude patterns or directory paths.
+    required: false
+    default: ""
+
+outputs:
+  report:
+    description: Path to the generated report.
+    value: ${{ inputs.output }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install MCP Admit
+      shell: bash
+      run: python -m pip install "${GITHUB_ACTION_PATH}"
+
+    - name: Run admission scan
+      shell: bash
+      env:
+        MCP_ADMIT_INPUT_PATH: ${{ inputs.path }}
+        MCP_ADMIT_PROFILE: ${{ inputs.profile }}
+        MCP_ADMIT_POLICY: ${{ inputs.policy }}
+        MCP_ADMIT_FAIL_ON: ${{ inputs['fail-on'] }}
+        MCP_ADMIT_FORMAT: ${{ inputs.format }}
+        MCP_ADMIT_OUTPUT: ${{ inputs.output }}
+        MCP_ADMIT_INCLUDE: ${{ inputs.include }}
+        MCP_ADMIT_EXCLUDE: ${{ inputs.exclude }}
+      run: |
+        args=(scan "$MCP_ADMIT_INPUT_PATH" --format "$MCP_ADMIT_FORMAT" --out "$MCP_ADMIT_OUTPUT")
+        if [[ -n "$MCP_ADMIT_PROFILE" ]]; then args+=(--profile "$MCP_ADMIT_PROFILE"); fi
+        if [[ -n "$MCP_ADMIT_POLICY" ]]; then args+=(--policy "$MCP_ADMIT_POLICY"); fi
+        if [[ -n "$MCP_ADMIT_FAIL_ON" ]]; then args+=(--fail-on "$MCP_ADMIT_FAIL_ON"); fi
+        while IFS= read -r pattern; do
+          if [[ -n "$pattern" ]]; then args+=(--include "$pattern"); fi
+        done <<< "$MCP_ADMIT_INCLUDE"
+        while IFS= read -r pattern; do
+          if [[ -n "$pattern" ]]; then args+=(--exclude "$pattern"); fi
+        done <<< "$MCP_ADMIT_EXCLUDE"
+        python -m mcp_admit "${args[@]}"
+
+branding:
+  icon: shield
+  color: gray-dark

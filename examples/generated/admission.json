@@ -1,0 +1,1011 @@
+{
+  "schema_version": "mcp-admit.admission.v1",
+  "tool_version": "0.3.0",
+  "subject": {
+    "target": "examples\\poisoned_tool_manifest.json",
+    "server": "",
+    "service": "agent-platform",
+    "owner": "security",
+    "environment": "ci",
+    "request_id": "generated"
+  },
+  "decision": "deny",
+  "decision_reason": "Policy or risk analysis requires denial.",
+  "approval": null,
+  "gate_result": "fail",
+  "risk_level": "L4",
+  "risk_score": 95,
+  "capabilities": [
+    "data_exfiltration",
+    "file_read",
+    "network_send",
+    "overbroad_schema",
+    "prompt_injection",
+    "shell_exec"
+  ],
+  "finding_ids": [
+    "MCPG-CAP-001",
+    "MCPG-CAP-002",
+    "MCPG-CAP-004",
+    "MCPG-FLOW-001",
+    "MCPG-FLOW-002",
+    "MCPG-INJ-001",
+    "MCPG-INJ-002",
+    "MCPG-SCHEMA-001",
+    "MCPG-SCHEMA-002",
+    "MCPG-SCHEMA-003",
+    "MCPG-SCHEMA-004"
+  ],
+  "policy_context": {
+    "profile": null,
+    "fail_on": null,
+    "deny_capabilities": [],
+    "require_approval_levels": [],
+    "allow_exec_command_count": 0,
+    "waiver_count": 0,
+    "policy_effect_count": 0
+  },
+  "policy_effects": [],
+  "rule_explanations": [
+    {
+      "id": "MCPG-INJ-001",
+      "title": "prompt injection phrase in tool metadata",
+      "severity": "high",
+      "category": "injection",
+      "capability": "prompt_injection",
+      "risk_level": "L3",
+      "policy_action": "quarantine",
+      "description": "Tool metadata contains instruction-like language visible to the model.",
+      "recommendation": "Quarantine the metadata and require manual review before approval.",
+      "owasp": [
+        "MCP Top 10: Tool Poisoning",
+        "MCP Top 10: Context Injection"
+      ]
+    },
+    {
+      "id": "MCPG-INJ-002",
+      "title": "hidden or obfuscated instruction in tool metadata",
+      "severity": "medium",
+      "category": "injection",
+      "capability": "prompt_injection",
+      "risk_level": "L2",
+      "policy_action": "quarantine",
+      "description": "Tool metadata contains hidden, obfuscated, or secrecy-oriented markers.",
+      "recommendation": "Require manual review and remove hidden instructions.",
+      "owasp": [
+        "MCP Top 10: Tool Poisoning",
+        "MCP Top 10: Context Injection"
+      ]
+    },
+    {
+      "id": "MCPG-CAP-004",
+      "title": "network exfiltration capability",
+      "severity": "high",
+      "category": "capability",
+      "capability": "network_send",
+      "risk_level": "L3",
+      "policy_action": "require_approval",
+      "description": "Tool metadata or schema suggests a sensitive capability.",
+      "recommendation": "Map the capability to approval, sandboxing, and least privilege.",
+      "owasp": [
+        "MCP Top 10: Scope Creep"
+      ]
+    },
+    {
+      "id": "MCPG-SCHEMA-001",
+      "title": "free-form object schema",
+      "severity": "medium",
+      "category": "schema",
+      "capability": "overbroad_schema",
+      "risk_level": "L2",
+      "policy_action": "allow_with_constraints",
+      "description": "Schema allows additional free-form parameters.",
+      "recommendation": "Set additionalProperties=false and enumerate supported parameters.",
+      "owasp": [
+        "MCP Top 10: Scope Creep",
+        "MCP Top 10: Intent Flow Subversion"
+      ]
+    },
+    {
+      "id": "MCPG-CAP-002",
+      "title": "file read capability",
+      "severity": "high",
+      "category": "capability",
+      "capability": "file_read",
+      "risk_level": "L3",
+      "policy_action": "require_approval",
+      "description": "Tool metadata or schema suggests a sensitive capability.",
+      "recommendation": "Map the capability to approval, sandboxing, and least privilege.",
+      "owasp": [
+        "MCP Top 10: Scope Creep"
+      ]
+    },
+    {
+      "id": "MCPG-SCHEMA-002",
+      "title": "unbounded file path parameter",
+      "severity": "high",
+      "category": "schema",
+      "capability": "file_read",
+      "risk_level": "L3",
+      "policy_action": "require_approval",
+      "description": "Schema accepts a free-form file path without constraints.",
+      "recommendation": "Add allowed roots, path patterns, and per-call approval.",
+      "owasp": [
+        "MCP Top 10: Scope Creep",
+        "MCP Top 10: Intent Flow Subversion"
+      ]
+    },
+    {
+      "id": "MCPG-SCHEMA-003",
+      "title": "unbounded url parameter",
+      "severity": "high",
+      "category": "schema",
+      "capability": "network_send",
+      "risk_level": "L3",
+      "policy_action": "require_approval",
+      "description": "Schema accepts a free-form URL without allowed domain constraints.",
+      "recommendation": "Enforce allowed domains and deny outbound writes by default.",
+      "owasp": [
+        "MCP Top 10: Scope Creep",
+        "MCP Top 10: Intent Flow Subversion"
+      ]
+    },
+    {
+      "id": "MCPG-CAP-001",
+      "title": "shell execution capability",
+      "severity": "critical",
+      "category": "capability",
+      "capability": "shell_exec",
+      "risk_level": "L4",
+      "policy_action": "deny",
+      "description": "Tool metadata or schema suggests a sensitive capability.",
+      "recommendation": "Map the capability to approval, sandboxing, and least privilege.",
+      "owasp": [
+        "MCP Top 10: Scope Creep"
+      ]
+    },
+    {
+      "id": "MCPG-SCHEMA-004",
+      "title": "dangerous command or code parameter",
+      "severity": "critical",
+      "category": "schema",
+      "capability": "shell_exec",
+      "risk_level": "L4",
+      "policy_action": "deny",
+      "description": "Schema accepts a free-form command, script, exec, or code parameter.",
+      "recommendation": "Remove generic execution parameters or enumerate safe actions.",
+      "owasp": [
+        "MCP Top 10: Scope Creep",
+        "MCP Top 10: Intent Flow Subversion"
+      ]
+    },
+    {
+      "id": "MCPG-FLOW-001",
+      "title": "sensitive data access combined with outbound channel",
+      "severity": "critical",
+      "category": "capability",
+      "capability": "data_exfiltration",
+      "risk_level": "L4",
+      "policy_action": "deny",
+      "description": "Sensitive reads and outbound actions coexist in the admitted tool set.",
+      "recommendation": "Separate trust boundaries and require narrow egress plus per-call approval.",
+      "owasp": [
+        "MCP Top 10: Intent Flow Subversion",
+        "MCP Top 10: Context Over-Sharing"
+      ]
+    },
+    {
+      "id": "MCPG-FLOW-002",
+      "title": "prompt injection combined with high-impact capability",
+      "severity": "critical",
+      "category": "injection",
+      "capability": "prompt_injection",
+      "risk_level": "L4",
+      "policy_action": "quarantine",
+      "description": "Suspicious instructions coexist with tools that can perform high-impact actions.",
+      "recommendation": "Quarantine metadata and isolate high-impact capabilities behind approval.",
+      "owasp": [
+        "MCP Top 10: Intent Flow Subversion",
+        "MCP Top 10: Context Over-Sharing"
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "admission.static_scan",
+      "title": "Static scan completed",
+      "required": true,
+      "status": "fail",
+      "detail": "Static scan completed with gate result fail."
+    },
+    {
+      "id": "admission.runtime_policy",
+      "title": "Runtime policy generated",
+      "required": true,
+      "status": "pass",
+      "detail": "Runtime policy contains 7 rules."
+    },
+    {
+      "id": "admission.human_approval",
+      "title": "Human approval",
+      "required": true,
+      "status": "warn",
+      "detail": "Human approval is required."
+    },
+    {
+      "id": "admission.sandbox",
+      "title": "Sandbox",
+      "required": true,
+      "status": "warn",
+      "detail": "Sandboxing is required."
+    },
+    {
+      "id": "admission.egress",
+      "title": "Egress review",
+      "required": true,
+      "status": "warn",
+      "detail": "Network egress review is required."
+    },
+    {
+      "id": "admission.credentials",
+      "title": "Credential review",
+      "required": false,
+      "status": "pass",
+      "detail": "No credential review required."
+    }
+  ],
+  "runtime_policy": {
+    "schema_version": "mcp-admit.runtime-policy.v1",
+    "tool_version": "0.3.0",
+    "target": "examples\\poisoned_tool_manifest.json",
+    "source_schema_version": "mcp-admit.report.v1",
+    "default_action": "deny",
+    "rules": [
+      {
+        "id": "runtime.default",
+        "scope": "default",
+        "match": {},
+        "action": "deny",
+        "require_approval": true,
+        "sandbox": true,
+        "network": "deny",
+        "risk_level": "L4",
+        "risk_score": 95,
+        "finding_ids": [],
+        "reason": "Default runtime posture derived from the scan summary."
+      },
+      {
+        "id": "runtime.capability.data_exfiltration",
+        "scope": "capability",
+        "match": {
+          "capability": "data_exfiltration"
+        },
+        "action": "quarantine",
+        "require_approval": true,
+        "sandbox": true,
+        "network": "deny",
+        "risk_level": "L4",
+        "risk_score": 90,
+        "finding_ids": [
+          "MCPG-FLOW-001"
+        ],
+        "reason": "Runtime rule derived from findings for capability data_exfiltration."
+      },
+      {
+        "id": "runtime.capability.file_read",
+        "scope": "capability",
+        "match": {
+          "capability": "file_read"
+        },
+        "action": "require_approval",
+        "require_approval": true,
+        "sandbox": true,
+        "network": "allow",
+        "risk_level": "L3",
+        "risk_score": 65,
+        "finding_ids": [
+          "MCPG-CAP-002",
+          "MCPG-SCHEMA-002"
+        ],
+        "reason": "Runtime rule derived from findings for capability file_read."
+      },
+      {
+        "id": "runtime.capability.network_send",
+        "scope": "capability",
+        "match": {
+          "capability": "network_send"
+        },
+        "action": "require_approval",
+        "require_approval": true,
+        "sandbox": false,
+        "network": "restricted",
+        "risk_level": "L3",
+        "risk_score": 70,
+        "finding_ids": [
+          "MCPG-CAP-004",
+          "MCPG-SCHEMA-003"
+        ],
+        "reason": "Runtime rule derived from findings for capability network_send."
+      },
+      {
+        "id": "runtime.capability.overbroad_schema",
+        "scope": "capability",
+        "match": {
+          "capability": "overbroad_schema"
+        },
+        "action": "allow_with_constraints",
+        "require_approval": false,
+        "sandbox": false,
+        "network": "allow",
+        "risk_level": "L2",
+        "risk_score": 40,
+        "finding_ids": [
+          "MCPG-SCHEMA-001"
+        ],
+        "reason": "Runtime rule derived from findings for capability overbroad_schema."
+      },
+      {
+        "id": "runtime.capability.prompt_injection",
+        "scope": "capability",
+        "match": {
+          "capability": "prompt_injection"
+        },
+        "action": "quarantine",
+        "require_approval": true,
+        "sandbox": true,
+        "network": "deny",
+        "risk_level": "L4",
+        "risk_score": 95,
+        "finding_ids": [
+          "MCPG-FLOW-002",
+          "MCPG-INJ-001",
+          "MCPG-INJ-002"
+        ],
+        "reason": "Runtime rule derived from findings for capability prompt_injection."
+      },
+      {
+        "id": "runtime.capability.shell_exec",
+        "scope": "capability",
+        "match": {
+          "capability": "shell_exec"
+        },
+        "action": "deny",
+        "require_approval": true,
+        "sandbox": true,
+        "network": "deny",
+        "risk_level": "L4",
+        "risk_score": 85,
+        "finding_ids": [
+          "MCPG-CAP-001",
+          "MCPG-SCHEMA-004"
+        ],
+        "reason": "Runtime rule derived from findings for capability shell_exec."
+      }
+    ],
+    "notes": [
+      "Require human review before connecting this MCP server or tool.",
+      "Do not execute by default; use sandbox and an explicit allowlist if approved.",
+      "Restrict egress to approved domains before allowing outbound writes.",
+      "Quarantine suspicious metadata until manually reviewed."
+    ]
+  },
+  "audit": {
+    "schema_version": "mcp-admit.audit.v1",
+    "tool_version": "0.3.0",
+    "target": "examples\\poisoned_tool_manifest.json",
+    "gate_result": "fail",
+    "runtime_policy": {
+      "schema_version": "mcp-admit.runtime-policy.v1",
+      "tool_version": "0.3.0",
+      "target": "examples\\poisoned_tool_manifest.json",
+      "source_schema_version": "mcp-admit.report.v1",
+      "default_action": "deny",
+      "rules": [
+        {
+          "id": "runtime.default",
+          "scope": "default",
+          "match": {},
+          "action": "deny",
+          "require_approval": true,
+          "sandbox": true,
+          "network": "deny",
+          "risk_level": "L4",
+          "risk_score": 95,
+          "finding_ids": [],
+          "reason": "Default runtime posture derived from the scan summary."
+        },
+        {
+          "id": "runtime.capability.data_exfiltration",
+          "scope": "capability",
+          "match": {
+            "capability": "data_exfiltration"
+          },
+          "action": "quarantine",
+          "require_approval": true,
+          "sandbox": true,
+          "network": "deny",
+          "risk_level": "L4",
+          "risk_score": 90,
+          "finding_ids": [
+            "MCPG-FLOW-001"
+          ],
+          "reason": "Runtime rule derived from findings for capability data_exfiltration."
+        },
+        {
+          "id": "runtime.capability.file_read",
+          "scope": "capability",
+          "match": {
+            "capability": "file_read"
+          },
+          "action": "require_approval",
+          "require_approval": true,
+          "sandbox": true,
+          "network": "allow",
+          "risk_level": "L3",
+          "risk_score": 65,
+          "finding_ids": [
+            "MCPG-CAP-002",
+            "MCPG-SCHEMA-002"
+          ],
+          "reason": "Runtime rule derived from findings for capability file_read."
+        },
+        {
+          "id": "runtime.capability.network_send",
+          "scope": "capability",
+          "match": {
+            "capability": "network_send"
+          },
+          "action": "require_approval",
+          "require_approval": true,
+          "sandbox": false,
+          "network": "restricted",
+          "risk_level": "L3",
+          "risk_score": 70,
+          "finding_ids": [
+            "MCPG-CAP-004",
+            "MCPG-SCHEMA-003"
+          ],
+          "reason": "Runtime rule derived from findings for capability network_send."
+        },
+        {
+          "id": "runtime.capability.overbroad_schema",
+          "scope": "capability",
+          "match": {
+            "capability": "overbroad_schema"
+          },
+          "action": "allow_with_constraints",
+          "require_approval": false,
+          "sandbox": false,
+          "network": "allow",
+          "risk_level": "L2",
+          "risk_score": 40,
+          "finding_ids": [
+            "MCPG-SCHEMA-001"
+          ],
+          "reason": "Runtime rule derived from findings for capability overbroad_schema."
+        },
+        {
+          "id": "runtime.capability.prompt_injection",
+          "scope": "capability",
+          "match": {
+            "capability": "prompt_injection"
+          },
+          "action": "quarantine",
+          "require_approval": true,
+          "sandbox": true,
+          "network": "deny",
+          "risk_level": "L4",
+          "risk_score": 95,
+          "finding_ids": [
+            "MCPG-FLOW-002",
+            "MCPG-INJ-001",
+            "MCPG-INJ-002"
+          ],
+          "reason": "Runtime rule derived from findings for capability prompt_injection."
+        },
+        {
+          "id": "runtime.capability.shell_exec",
+          "scope": "capability",
+          "match": {
+            "capability": "shell_exec"
+          },
+          "action": "deny",
+          "require_approval": true,
+          "sandbox": true,
+          "network": "deny",
+          "risk_level": "L4",
+          "risk_score": 85,
+          "finding_ids": [
+            "MCPG-CAP-001",
+            "MCPG-SCHEMA-004"
+          ],
+          "reason": "Runtime rule derived from findings for capability shell_exec."
+        }
+      ],
+      "notes": [
+        "Require human review before connecting this MCP server or tool.",
+        "Do not execute by default; use sandbox and an explicit allowlist if approved.",
+        "Restrict egress to approved domains before allowing outbound writes.",
+        "Quarantine suspicious metadata until manually reviewed."
+      ]
+    },
+    "scan_summary": {
+      "total_findings": 12,
+      "max_severity": "critical",
+      "risk_score": 95,
+      "tool_risk_level": "L4",
+      "gate_result": "fail",
+      "approval_required": true,
+      "sandbox_required": true,
+      "egress_review_required": true,
+      "credential_review_required": false,
+      "recommended_policy": {
+        "action": "deny",
+        "require_approval": true,
+        "sandbox": true,
+        "network": "deny",
+        "notes": [
+          "Require human review before connecting this MCP server or tool.",
+          "Do not execute by default; use sandbox and an explicit allowlist if approved.",
+          "Restrict egress to approved domains before allowing outbound writes.",
+          "Quarantine suspicious metadata until manually reviewed."
+        ]
+      },
+      "risk_score_method": "max_finding_with_composition",
+      "risk_factors": [
+        {
+          "id": "MCPG-FLOW-002",
+          "score": 95,
+          "reason": "Suspicious instructions are present in a tool set that can perform high-impact actions.",
+          "capabilities": [
+            "prompt_injection"
+          ],
+          "source_finding_ids": [
+            "MCPG-CAP-001",
+            "MCPG-CAP-004",
+            "MCPG-INJ-001",
+            "MCPG-INJ-002",
+            "MCPG-SCHEMA-003",
+            "MCPG-SCHEMA-004"
+          ],
+          "occurrences": 1
+        },
+        {
+          "id": "MCPG-FLOW-001",
+          "score": 90,
+          "reason": "The admitted tool set can access sensitive data and transmit data outside the trust boundary.",
+          "capabilities": [
+            "data_exfiltration"
+          ],
+          "source_finding_ids": [
+            "MCPG-CAP-002",
+            "MCPG-CAP-004",
+            "MCPG-SCHEMA-002",
+            "MCPG-SCHEMA-003"
+          ],
+          "occurrences": 1
+        },
+        {
+          "id": "MCPG-CAP-001",
+          "score": 85,
+          "reason": "Tool metadata or schema suggests this tool exposes a sensitive capability.",
+          "capabilities": [
+            "shell_exec"
+          ],
+          "source_finding_ids": [
+            "MCPG-CAP-001"
+          ],
+          "occurrences": 1
+        },
+        {
+          "id": "MCPG-SCHEMA-004",
+          "score": 85,
+          "reason": "Schema accepts a free-form command, script, exec, or code parameter.",
+          "capabilities": [
+            "shell_exec"
+          ],
+          "source_finding_ids": [
+            "MCPG-SCHEMA-004"
+          ],
+          "occurrences": 1
+        },
+        {
+          "id": "MCPG-CAP-004",
+          "score": 70,
+          "reason": "Tool metadata or schema suggests this tool exposes a sensitive capability.",
+          "capabilities": [
+            "network_send"
+          ],
+          "source_finding_ids": [
+            "MCPG-CAP-004"
+          ],
+          "occurrences": 2
+        },
+        {
+          "id": "MCPG-CAP-002",
+          "score": 65,
+          "reason": "Tool metadata or schema suggests this tool exposes a sensitive capability.",
+          "capabilities": [
+            "file_read"
+          ],
+          "source_finding_ids": [
+            "MCPG-CAP-002"
+          ],
+          "occurrences": 1
+        },
+        {
+          "id": "MCPG-SCHEMA-002",
+          "score": 65,
+          "reason": "Schema accepts a free-form file path without an allowlist or pattern constraint.",
+          "capabilities": [
+            "file_read"
+          ],
+          "source_finding_ids": [
+            "MCPG-SCHEMA-002"
+          ],
+          "occurrences": 1
+        },
+        {
+          "id": "MCPG-SCHEMA-003",
+          "score": 65,
+          "reason": "Schema accepts a free-form URL without allowed domain constraints.",
+          "capabilities": [
+            "network_send"
+          ],
+          "source_finding_ids": [
+            "MCPG-SCHEMA-003"
+          ],
+          "occurrences": 1
+        }
+      ]
+    },
+    "policy_context": {
+      "profile": null,
+      "fail_on": null,
+      "deny_capabilities": [],
+      "require_approval_levels": [],
+      "allow_exec_command_count": 0,
+      "waiver_count": 0,
+      "policy_effect_count": 0
+    },
+    "policy_effects": [],
+    "rule_explanations": [
+      {
+        "id": "MCPG-INJ-001",
+        "title": "prompt injection phrase in tool metadata",
+        "severity": "high",
+        "category": "injection",
+        "capability": "prompt_injection",
+        "risk_level": "L3",
+        "policy_action": "quarantine",
+        "description": "Tool metadata contains instruction-like language visible to the model.",
+        "recommendation": "Quarantine the metadata and require manual review before approval.",
+        "owasp": [
+          "MCP Top 10: Tool Poisoning",
+          "MCP Top 10: Context Injection"
+        ]
+      },
+      {
+        "id": "MCPG-INJ-002",
+        "title": "hidden or obfuscated instruction in tool metadata",
+        "severity": "medium",
+        "category": "injection",
+        "capability": "prompt_injection",
+        "risk_level": "L2",
+        "policy_action": "quarantine",
+        "description": "Tool metadata contains hidden, obfuscated, or secrecy-oriented markers.",
+        "recommendation": "Require manual review and remove hidden instructions.",
+        "owasp": [
+          "MCP Top 10: Tool Poisoning",
+          "MCP Top 10: Context Injection"
+        ]
+      },
+      {
+        "id": "MCPG-CAP-004",
+        "title": "network exfiltration capability",
+        "severity": "high",
+        "category": "capability",
+        "capability": "network_send",
+        "risk_level": "L3",
+        "policy_action": "require_approval",
+        "description": "Tool metadata or schema suggests a sensitive capability.",
+        "recommendation": "Map the capability to approval, sandboxing, and least privilege.",
+        "owasp": [
+          "MCP Top 10: Scope Creep"
+        ]
+      },
+      {
+        "id": "MCPG-SCHEMA-001",
+        "title": "free-form object schema",
+        "severity": "medium",
+        "category": "schema",
+        "capability": "overbroad_schema",
+        "risk_level": "L2",
+        "policy_action": "allow_with_constraints",
+        "description": "Schema allows additional free-form parameters.",
+        "recommendation": "Set additionalProperties=false and enumerate supported parameters.",
+        "owasp": [
+          "MCP Top 10: Scope Creep",
+          "MCP Top 10: Intent Flow Subversion"
+        ]
+      },
+      {
+        "id": "MCPG-CAP-002",
+        "title": "file read capability",
+        "severity": "high",
+        "category": "capability",
+        "capability": "file_read",
+        "risk_level": "L3",
+        "policy_action": "require_approval",
+        "description": "Tool metadata or schema suggests a sensitive capability.",
+        "recommendation": "Map the capability to approval, sandboxing, and least privilege.",
+        "owasp": [
+          "MCP Top 10: Scope Creep"
+        ]
+      },
+      {
+        "id": "MCPG-SCHEMA-002",
+        "title": "unbounded file path parameter",
+        "severity": "high",
+        "category": "schema",
+        "capability": "file_read",
+        "risk_level": "L3",
+        "policy_action": "require_approval",
+        "description": "Schema accepts a free-form file path without constraints.",
+        "recommendation": "Add allowed roots, path patterns, and per-call approval.",
+        "owasp": [
+          "MCP Top 10: Scope Creep",
+          "MCP Top 10: Intent Flow Subversion"
+        ]
+      },
+      {
+        "id": "MCPG-SCHEMA-003",
+        "title": "unbounded url parameter",
+        "severity": "high",
+        "category": "schema",
+        "capability": "network_send",
+        "risk_level": "L3",
+        "policy_action": "require_approval",
+        "description": "Schema accepts a free-form URL without allowed domain constraints.",
+        "recommendation": "Enforce allowed domains and deny outbound writes by default.",
+        "owasp": [
+          "MCP Top 10: Scope Creep",
+          "MCP Top 10: Intent Flow Subversion"
+        ]
+      },
+      {
+        "id": "MCPG-CAP-001",
+        "title": "shell execution capability",
+        "severity": "critical",
+        "category": "capability",
+        "capability": "shell_exec",
+        "risk_level": "L4",
+        "policy_action": "deny",
+        "description": "Tool metadata or schema suggests a sensitive capability.",
+        "recommendation": "Map the capability to approval, sandboxing, and least privilege.",
+        "owasp": [
+          "MCP Top 10: Scope Creep"
+        ]
+      },
+      {
+        "id": "MCPG-SCHEMA-004",
+        "title": "dangerous command or code parameter",
+        "severity": "critical",
+        "category": "schema",
+        "capability": "shell_exec",
+        "risk_level": "L4",
+        "policy_action": "deny",
+        "description": "Schema accepts a free-form command, script, exec, or code parameter.",
+        "recommendation": "Remove generic execution parameters or enumerate safe actions.",
+        "owasp": [
+          "MCP Top 10: Scope Creep",
+          "MCP Top 10: Intent Flow Subversion"
+        ]
+      },
+      {
+        "id": "MCPG-FLOW-001",
+        "title": "sensitive data access combined with outbound channel",
+        "severity": "critical",
+        "category": "capability",
+        "capability": "data_exfiltration",
+        "risk_level": "L4",
+        "policy_action": "deny",
+        "description": "Sensitive reads and outbound actions coexist in the admitted tool set.",
+        "recommendation": "Separate trust boundaries and require narrow egress plus per-call approval.",
+        "owasp": [
+          "MCP Top 10: Intent Flow Subversion",
+          "MCP Top 10: Context Over-Sharing"
+        ]
+      },
+      {
+        "id": "MCPG-FLOW-002",
+        "title": "prompt injection combined with high-impact capability",
+        "severity": "critical",
+        "category": "injection",
+        "capability": "prompt_injection",
+        "risk_level": "L4",
+        "policy_action": "quarantine",
+        "description": "Suspicious instructions coexist with tools that can perform high-impact actions.",
+        "recommendation": "Quarantine metadata and isolate high-impact capabilities behind approval.",
+        "owasp": [
+          "MCP Top 10: Intent Flow Subversion",
+          "MCP Top 10: Context Over-Sharing"
+        ]
+      }
+    ],
+    "items": [
+      {
+        "id": "audit.scan_gate",
+        "title": "Admission gate",
+        "status": "fail",
+        "detail": "Scan gate result is fail."
+      },
+      {
+        "id": "audit.runtime_policy",
+        "title": "Runtime policy generated",
+        "status": "pass",
+        "detail": "Generated 7 runtime policy rules."
+      },
+      {
+        "id": "audit.approval",
+        "title": "Human approval",
+        "status": "warn",
+        "detail": "Human approval is required."
+      },
+      {
+        "id": "audit.sandbox",
+        "title": "Sandbox requirement",
+        "status": "warn",
+        "detail": "Sandbox execution is required."
+      },
+      {
+        "id": "audit.egress",
+        "title": "Egress review",
+        "status": "warn",
+        "detail": "Network egress review is required."
+      },
+      {
+        "id": "audit.credentials",
+        "title": "Credential review",
+        "status": "pass",
+        "detail": "No credential review required."
+      }
+    ],
+    "next_actions": [
+      "Do not connect this MCP server or tool until findings are reviewed.",
+      "Route the runtime policy and scan report to a human approver.",
+      "Require sandboxing before any live or runtime execution.",
+      "Restrict network egress to approved domains before runtime use."
+    ]
+  },
+  "scan_summary": {
+    "total_findings": 12,
+    "max_severity": "critical",
+    "risk_score": 95,
+    "tool_risk_level": "L4",
+    "gate_result": "fail",
+    "approval_required": true,
+    "sandbox_required": true,
+    "egress_review_required": true,
+    "credential_review_required": false,
+    "recommended_policy": {
+      "action": "deny",
+      "require_approval": true,
+      "sandbox": true,
+      "network": "deny",
+      "notes": [
+        "Require human review before connecting this MCP server or tool.",
+        "Do not execute by default; use sandbox and an explicit allowlist if approved.",
+        "Restrict egress to approved domains before allowing outbound writes.",
+        "Quarantine suspicious metadata until manually reviewed."
+      ]
+    },
+    "risk_score_method": "max_finding_with_composition",
+    "risk_factors": [
+      {
+        "id": "MCPG-FLOW-002",
+        "score": 95,
+        "reason": "Suspicious instructions are present in a tool set that can perform high-impact actions.",
+        "capabilities": [
+          "prompt_injection"
+        ],
+        "source_finding_ids": [
+          "MCPG-CAP-001",
+          "MCPG-CAP-004",
+          "MCPG-INJ-001",
+          "MCPG-INJ-002",
+          "MCPG-SCHEMA-003",
+          "MCPG-SCHEMA-004"
+        ],
+        "occurrences": 1
+      },
+      {
+        "id": "MCPG-FLOW-001",
+        "score": 90,
+        "reason": "The admitted tool set can access sensitive data and transmit data outside the trust boundary.",
+        "capabilities": [
+          "data_exfiltration"
+        ],
+        "source_finding_ids": [
+          "MCPG-CAP-002",
+          "MCPG-CAP-004",
+          "MCPG-SCHEMA-002",
+          "MCPG-SCHEMA-003"
+        ],
+        "occurrences": 1
+      },
+      {
+        "id": "MCPG-CAP-001",
+        "score": 85,
+        "reason": "Tool metadata or schema suggests this tool exposes a sensitive capability.",
+        "capabilities": [
+          "shell_exec"
+        ],
+        "source_finding_ids": [
+          "MCPG-CAP-001"
+        ],
+        "occurrences": 1
+      },
+      {
+        "id": "MCPG-SCHEMA-004",
+        "score": 85,
+        "reason": "Schema accepts a free-form command, script, exec, or code parameter.",
+        "capabilities": [
+          "shell_exec"
+        ],
+        "source_finding_ids": [
+          "MCPG-SCHEMA-004"
+        ],
+        "occurrences": 1
+      },
+      {
+        "id": "MCPG-CAP-004",
+        "score": 70,
+        "reason": "Tool metadata or schema suggests this tool exposes a sensitive capability.",
+        "capabilities": [
+          "network_send"
+        ],
+        "source_finding_ids": [
+          "MCPG-CAP-004"
+        ],
+        "occurrences": 2
+      },
+      {
+        "id": "MCPG-CAP-002",
+        "score": 65,
+        "reason": "Tool metadata or schema suggests this tool exposes a sensitive capability.",
+        "capabilities": [
+          "file_read"
+        ],
+        "source_finding_ids": [
+          "MCPG-CAP-002"
+        ],
+        "occurrences": 1
+      },
+      {
+        "id": "MCPG-SCHEMA-002",
+        "score": 65,
+        "reason": "Schema accepts a free-form file path without an allowlist or pattern constraint.",
+        "capabilities": [
+          "file_read"
+        ],
+        "source_finding_ids": [
+          "MCPG-SCHEMA-002"
+        ],
+        "occurrences": 1
+      },
+      {
+        "id": "MCPG-SCHEMA-003",
+        "score": 65,
+        "reason": "Schema accepts a free-form URL without allowed domain constraints.",
+        "capabilities": [
+          "network_send"
+        ],
+        "source_finding_ids": [
+          "MCPG-SCHEMA-003"
+        ],
+        "occurrences": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+name: MCP Admit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  mcp-admit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install MCP Admit
+        run: python -m pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Test
+        run: pytest
+
+      - name: Scan repository
+        run: >-
+          python -m mcp_admit scan .
+          --exclude "examples/"
+          --exclude "schemas/"
+          --exclude "README.md"
+          --format sarif
+          --out mcp-admit-report.sarif
+
+      - name: Build review pack
+        run: |
+          python -m mcp_admit review-pack . \
+            --out-dir mcp-admit-review-pack \
+            --exclude "examples/" \
+            --exclude "schemas/" \
+            --exclude "README.md" \
+            --github-step-summary \
+            --service github-actions \
+            --owner security \
+            --environment ci
+          cat mcp-admit-review-pack/github-step-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Release contract check
+        run: python -m mcp_admit release-check
+
+      - name: Upload review pack
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-admit-review-pack
+          path: mcp-admit-review-pack/
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v4
+        if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        continue-on-error: true
+        with:
+          sarif_file: mcp-admit-report.sarif
+          category: mcp-admit

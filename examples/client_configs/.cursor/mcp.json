@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "cursor-git": {
+      "command": "node",
+      "args": ["./servers/git.js"],
+      "env": {
+        "GIT_ROOT": "/tmp/repo"
+      }
+    }
+  }
+}

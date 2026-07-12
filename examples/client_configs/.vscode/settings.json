@@ -1,0 +1,9 @@
+{
+  "mcp": {
+    "servers": {
+      "vscode-docs": {
+        "url": "https://mcp.example.test/docs"
+      }
+    }
+  }
+}

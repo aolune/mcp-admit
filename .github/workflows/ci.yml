@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync --extra dev || pip install -e ".[dev]"
+      - run: uv run mcp-admit --version
+      - run: uv run mcp-admit schema admission
+      - name: Test composite action
+        uses: ./
+        with:
+          path: examples/safe_readonly_docs_manifest.json
+          profile: ci
+          fail-on: high
+          format: json
+          output: mcp-admit-action-smoke.json
+      - run: uv run --extra dev ruff check .
+      - run: uv run --extra dev pytest
+      - run: uv build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mcp-admit-dist
+          path: dist/*
+
+  security-gate:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync --extra dev || pip install -e ".[dev]"
+      - run: uv run python -m mcp_admit scan examples/safe_mcp_config.json --format json --fail-on high --out mcp-admit-report.json
+      - run: uv run python -m mcp_admit scan examples/poisoned_tool_manifest.json --format sarif --out mcp-admit-report.sarif
+      - run: uv run python -m mcp_admit benchmark examples/fixture_matrix.yaml --format json --out mcp-admit-benchmark.json
+      - run: uv run python -m mcp_admit benchmark examples/fixture_matrix.yaml --out mcp-admit-benchmark.md
+      - run: uv run python -m mcp_admit decide examples/poisoned_tool_manifest.json --service agent-platform --owner security --environment ci --request-id github-actions --out mcp-admit-admission.json
+      - run: uv run python -m mcp_admit schema report --out mcp-admit-report.schema.json
+      - run: uv run python -m mcp_admit schema runtime-policy --out mcp-admit-runtime-policy.schema.json
+      - run: uv run python -m mcp_admit schema audit --out mcp-admit-audit.schema.json
+      - run: uv run python -m mcp_admit schema admission --out mcp-admit-admission.schema.json
+      - uses: github/codeql-action/upload-sarif@v4
+        if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        continue-on-error: true
+        with:
+          sarif_file: mcp-admit-report.sarif
+          category: mcp-admit-demo
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mcp-admit-reports
+          path: |
+            mcp-admit-report.json
+            mcp-admit-report.sarif
+            mcp-admit-benchmark.json
+            mcp-admit-benchmark.md
+            mcp-admit-admission.json
+            mcp-admit-report.schema.json
+            mcp-admit-runtime-policy.schema.json
+            mcp-admit-audit.schema.json
+            mcp-admit-admission.schema.json

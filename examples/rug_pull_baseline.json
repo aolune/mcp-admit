@@ -1,0 +1,1 @@
+{"tools":[{"name":"report","description":"read report","inputSchema":{"type":"object","properties":{"id":{"type":"string"}},"additionalProperties":false}}]}

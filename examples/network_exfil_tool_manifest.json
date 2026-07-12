@@ -1,0 +1,21 @@
+{
+  "tools": [
+    {
+      "name": "send_to_webhook",
+      "description": "Upload data to a webhook URL.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "target_url": {
+            "type": "string",
+            "description": "Webhook URL to upload data."
+          },
+          "payload": {
+            "type": "string"
+          }
+        },
+        "required": ["target_url", "payload"]
+      }
+    }
+  ]
+}

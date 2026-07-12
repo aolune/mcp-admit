@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-admit"
+version = "0.3.0"
+description = "Static-first, no-exec-by-default admission control for MCP servers and agent tools"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+authors = [{name = "aolune"}]
+maintainers = [{name = "aolune"}]
+keywords = [
+  "mcp",
+  "model-context-protocol",
+  "security",
+  "static-analysis",
+  "agent-tools",
+  "admission-control",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Security",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = [
+  "typer>=0.12",
+  "pydantic>=2.13,<2.14",
+  "rich>=13.7",
+  "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["build>=1.2", "pytest>=8.0", "ruff>=0.5", "setuptools>=68", "wheel"]
+
+[project.scripts]
+mcp-admit = "mcp_admit.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/aolune/mcp-admit"
+Repository = "https://github.com/aolune/mcp-admit"
+Issues = "https://github.com/aolune/mcp-admit/issues"
+Changelog = "https://github.com/aolune/mcp-admit/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100

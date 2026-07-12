@@ -1,0 +1,135 @@
+{
+  "schema_version": "mcp-admit.runtime-policy.v1",
+  "tool_version": "0.3.0",
+  "target": "examples\\poisoned_tool_manifest.json",
+  "source_schema_version": "mcp-admit.report.v1",
+  "default_action": "deny",
+  "rules": [
+    {
+      "id": "runtime.default",
+      "scope": "default",
+      "match": {},
+      "action": "deny",
+      "require_approval": true,
+      "sandbox": true,
+      "network": "deny",
+      "risk_level": "L4",
+      "risk_score": 95,
+      "finding_ids": [],
+      "reason": "Default runtime posture derived from the scan summary."
+    },
+    {
+      "id": "runtime.capability.data_exfiltration",
+      "scope": "capability",
+      "match": {
+        "capability": "data_exfiltration"
+      },
+      "action": "quarantine",
+      "require_approval": true,
+      "sandbox": true,
+      "network": "deny",
+      "risk_level": "L4",
+      "risk_score": 90,
+      "finding_ids": [
+        "MCPG-FLOW-001"
+      ],
+      "reason": "Runtime rule derived from findings for capability data_exfiltration."
+    },
+    {
+      "id": "runtime.capability.file_read",
+      "scope": "capability",
+      "match": {
+        "capability": "file_read"
+      },
+      "action": "require_approval",
+      "require_approval": true,
+      "sandbox": true,
+      "network": "allow",
+      "risk_level": "L3",
+      "risk_score": 65,
+      "finding_ids": [
+        "MCPG-CAP-002",
+        "MCPG-SCHEMA-002"
+      ],
+      "reason": "Runtime rule derived from findings for capability file_read."
+    },
+    {
+      "id": "runtime.capability.network_send",
+      "scope": "capability",
+      "match": {
+        "capability": "network_send"
+      },
+      "action": "require_approval",
+      "require_approval": true,
+      "sandbox": false,
+      "network": "restricted",
+      "risk_level": "L3",
+      "risk_score": 70,
+      "finding_ids": [
+        "MCPG-CAP-004",
+        "MCPG-SCHEMA-003"
+      ],
+      "reason": "Runtime rule derived from findings for capability network_send."
+    },
+    {
+      "id": "runtime.capability.overbroad_schema",
+      "scope": "capability",
+      "match": {
+        "capability": "overbroad_schema"
+      },
+      "action": "allow_with_constraints",
+      "require_approval": false,
+      "sandbox": false,
+      "network": "allow",
+      "risk_level": "L2",
+      "risk_score": 40,
+      "finding_ids": [
+        "MCPG-SCHEMA-001"
+      ],
+      "reason": "Runtime rule derived from findings for capability overbroad_schema."
+    },
+    {
+      "id": "runtime.capability.prompt_injection",
+      "scope": "capability",
+      "match": {
+        "capability": "prompt_injection"
+      },
+      "action": "quarantine",
+      "require_approval": true,
+      "sandbox": true,
+      "network": "deny",
+      "risk_level": "L4",
+      "risk_score": 95,
+      "finding_ids": [
+        "MCPG-FLOW-002",
+        "MCPG-INJ-001",
+        "MCPG-INJ-002"
+      ],
+      "reason": "Runtime rule derived from findings for capability prompt_injection."
+    },
+    {
+      "id": "runtime.capability.shell_exec",
+      "scope": "capability",
+      "match": {
+        "capability": "shell_exec"
+      },
+      "action": "deny",
+      "require_approval": true,
+      "sandbox": true,
+      "network": "deny",
+      "risk_level": "L4",
+      "risk_score": 85,
+      "finding_ids": [
+        "MCPG-CAP-001",
+        "MCPG-SCHEMA-004"
+      ],
+      "reason": "Runtime rule derived from findings for capability shell_exec."
+    }
+  ],
+  "notes": [
+    "Require human review before connecting this MCP server or tool.",
+    "Do not execute by default; use sandbox and an explicit allowlist if approved.",
+    "Restrict egress to approved domains before allowing outbound writes.",
+    "Quarantine suspicious metadata until manually reviewed."
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "$defs": {
+    "RuntimePolicyRule": {
+      "properties": {
+        "action": {
+          "enum": [
+            "allow",
+            "allow_with_constraints",
+            "require_approval",
+            "deny",
+            "quarantine"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "finding_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Finding Ids",
+          "type": "array"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "match": {
+          "additionalProperties": true,
+          "title": "Match",
+          "type": "object"
+        },
+        "network": {
+          "enum": [
+            "allow",
+            "restricted",
+            "deny"
+          ],
+          "title": "Network",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "require_approval": {
+          "title": "Require Approval",
+          "type": "boolean"
+        },
+        "risk_level": {
+          "enum": [
+            "L0",
+            "L1",
+            "L2",
+            "L3",
+            "L4"
+          ],
+          "title": "Risk Level",
+          "type": "string"
+        },
+        "risk_score": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Risk Score",
+          "type": "integer"
+        },
+        "sandbox": {
+          "title": "Sandbox",
+          "type": "boolean"
+        },
+        "scope": {
+          "enum": [
+            "default",
+            "capability",
+            "finding"
+          ],
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "scope",
+        "action",
+        "require_approval",
+        "sandbox",
+        "network",
+        "risk_level",
+        "risk_score",
+        "reason"
+      ],
+      "title": "RuntimePolicyRule",
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/aolune/mcp-admit/schemas/runtime-policy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "default_action": {
+      "enum": [
+        "allow",
+        "allow_with_constraints",
+        "require_approval",
+        "deny",
+        "quarantine"
+      ],
+      "title": "Default Action",
+      "type": "string"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/$defs/RuntimePolicyRule"
+      },
+      "title": "Rules",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "mcp-admit.runtime-policy.v1",
+      "default": "mcp-admit.runtime-policy.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_schema_version": {
+      "title": "Source Schema Version",
+      "type": "string"
+    },
+    "target": {
+      "title": "Target",
+      "type": "string"
+    },
+    "tool_version": {
+      "default": "0.3.0",
+      "title": "Tool Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "target",
+    "source_schema_version",
+    "default_action",
+    "rules"
+  ],
+  "title": "MCP Admit Runtime Policy",
+  "type": "object"
+}

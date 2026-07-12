@@ -1,0 +1,244 @@
+{
+  "schema_version": "mcp-admit.inventory.v1",
+  "tool_version": "0.3.0",
+  "target": "examples\\client_configs",
+  "total_servers": 4,
+  "clients": [
+    "claude-desktop",
+    "cursor",
+    "vscode",
+    "windsurf"
+  ],
+  "servers": [
+    {
+      "server": {
+        "client": "claude-desktop",
+        "source": "examples\\client_configs\\Claude\\claude_desktop_config.json",
+        "name": "claude-files",
+        "location": "mcpServers.claude-files",
+        "transport": "stdio",
+        "command": "uvx",
+        "url": "",
+        "package": "",
+        "env_keys": [
+          "FILES_ROOT"
+        ]
+      },
+      "summary": {
+        "total_findings": 1,
+        "max_severity": "high",
+        "risk_score": 65,
+        "tool_risk_level": "L3",
+        "gate_result": "fail",
+        "approval_required": true,
+        "sandbox_required": true,
+        "egress_review_required": false,
+        "credential_review_required": false,
+        "recommended_policy": {
+          "action": "require_approval",
+          "require_approval": true,
+          "sandbox": true,
+          "network": "allow",
+          "notes": [
+            "Require human review before connecting this MCP server or tool.",
+            "Do not execute by default; use sandbox and an explicit allowlist if approved."
+          ]
+        },
+        "risk_score_method": "max_finding_with_composition",
+        "risk_factors": [
+          {
+            "id": "MCPG-STDIO-001",
+            "score": 65,
+            "reason": "Local stdio servers expand the execution boundary before tool metadata is trusted.",
+            "capabilities": [
+              "code_exec"
+            ],
+            "source_finding_ids": [
+              "MCPG-STDIO-001"
+            ],
+            "occurrences": 1
+          }
+        ]
+      },
+      "finding_ids": [
+        "MCPG-STDIO-001"
+      ],
+      "capabilities": [
+        "code_exec"
+      ],
+      "definition_hash": "14dac11a446bd67d62acf0310a00f92b398652cb09d60f4764697193d543c0bf",
+      "approval": {
+        "status": "unknown",
+        "approval_id": "",
+        "reason": "No approval registry provided."
+      }
+    },
+    {
+      "server": {
+        "client": "cursor",
+        "source": "examples\\client_configs\\.cursor\\mcp.json",
+        "name": "cursor-git",
+        "location": "mcpServers.cursor-git",
+        "transport": "stdio",
+        "command": "node",
+        "url": "",
+        "package": "",
+        "env_keys": [
+          "GIT_ROOT"
+        ]
+      },
+      "summary": {
+        "total_findings": 1,
+        "max_severity": "high",
+        "risk_score": 65,
+        "tool_risk_level": "L3",
+        "gate_result": "fail",
+        "approval_required": true,
+        "sandbox_required": true,
+        "egress_review_required": false,
+        "credential_review_required": false,
+        "recommended_policy": {
+          "action": "require_approval",
+          "require_approval": true,
+          "sandbox": true,
+          "network": "allow",
+          "notes": [
+            "Require human review before connecting this MCP server or tool.",
+            "Do not execute by default; use sandbox and an explicit allowlist if approved."
+          ]
+        },
+        "risk_score_method": "max_finding_with_composition",
+        "risk_factors": [
+          {
+            "id": "MCPG-STDIO-001",
+            "score": 65,
+            "reason": "Local stdio servers expand the execution boundary before tool metadata is trusted.",
+            "capabilities": [
+              "code_exec"
+            ],
+            "source_finding_ids": [
+              "MCPG-STDIO-001"
+            ],
+            "occurrences": 1
+          }
+        ]
+      },
+      "finding_ids": [
+        "MCPG-STDIO-001"
+      ],
+      "capabilities": [
+        "code_exec"
+      ],
+      "definition_hash": "bf1f426f1f1379b50a2c8878b485065dee061411ef020a919f780eb323d9846c",
+      "approval": {
+        "status": "unknown",
+        "approval_id": "",
+        "reason": "No approval registry provided."
+      }
+    },
+    {
+      "server": {
+        "client": "vscode",
+        "source": "examples\\client_configs\\.vscode\\settings.json",
+        "name": "vscode-docs",
+        "location": "mcp.servers.vscode-docs",
+        "transport": "http",
+        "command": "",
+        "url": "https://mcp.example.test/docs",
+        "package": "",
+        "env_keys": []
+      },
+      "summary": {
+        "total_findings": 0,
+        "max_severity": "info",
+        "risk_score": 0,
+        "tool_risk_level": "L0",
+        "gate_result": "pass",
+        "approval_required": false,
+        "sandbox_required": false,
+        "egress_review_required": false,
+        "credential_review_required": false,
+        "recommended_policy": {
+          "action": "allow",
+          "require_approval": false,
+          "sandbox": false,
+          "network": "allow",
+          "notes": []
+        },
+        "risk_score_method": "max_finding_with_composition",
+        "risk_factors": []
+      },
+      "finding_ids": [],
+      "capabilities": [],
+      "definition_hash": "f74709bf9e6c316b5c21468c35f7c26ca400b5006c23b00545e693b41c00c702",
+      "approval": {
+        "status": "unknown",
+        "approval_id": "",
+        "reason": "No approval registry provided."
+      }
+    },
+    {
+      "server": {
+        "client": "windsurf",
+        "source": "examples\\client_configs\\windsurf\\mcp_config.json",
+        "name": "windsurf-db",
+        "location": "mcpServers.windsurf-db",
+        "transport": "stdio",
+        "command": "python",
+        "url": "",
+        "package": "",
+        "env_keys": [
+          "DATABASE_URL"
+        ]
+      },
+      "summary": {
+        "total_findings": 1,
+        "max_severity": "high",
+        "risk_score": 65,
+        "tool_risk_level": "L3",
+        "gate_result": "fail",
+        "approval_required": true,
+        "sandbox_required": true,
+        "egress_review_required": false,
+        "credential_review_required": false,
+        "recommended_policy": {
+          "action": "require_approval",
+          "require_approval": true,
+          "sandbox": true,
+          "network": "allow",
+          "notes": [
+            "Require human review before connecting this MCP server or tool.",
+            "Do not execute by default; use sandbox and an explicit allowlist if approved."
+          ]
+        },
+        "risk_score_method": "max_finding_with_composition",
+        "risk_factors": [
+          {
+            "id": "MCPG-STDIO-001",
+            "score": 65,
+            "reason": "Local stdio servers expand the execution boundary before tool metadata is trusted.",
+            "capabilities": [
+              "code_exec"
+            ],
+            "source_finding_ids": [
+              "MCPG-STDIO-001"
+            ],
+            "occurrences": 1
+          }
+        ]
+      },
+      "finding_ids": [
+        "MCPG-STDIO-001"
+      ],
+      "capabilities": [
+        "code_exec"
+      ],
+      "definition_hash": "fc9b10c9f81fccbface4554006edbd184498039592ee72981ca60cb97972172a",
+      "approval": {
+        "status": "unknown",
+        "approval_id": "",
+        "reason": "No approval registry provided."
+      }
+    }
+  ]
+}

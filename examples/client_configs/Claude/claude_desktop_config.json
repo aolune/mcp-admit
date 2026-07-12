@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "claude-files": {
+      "command": "uvx",
+      "args": ["mcp-server-files@1.0.0"],
+      "env": {
+        "FILES_ROOT": "/tmp/docs"
+      }
+    }
+  }
+}

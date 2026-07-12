@@ -1,0 +1,67 @@
+{
+  "$defs": {
+    "ReleaseCheckItem": {
+      "properties": {
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "fail"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "detail"
+      ],
+      "title": "ReleaseCheckItem",
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/aolune/mcp-admit/schemas/release-check.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "items": {
+      "items": {
+        "$ref": "#/$defs/ReleaseCheckItem"
+      },
+      "title": "Items",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "mcp-admit.release-check.v1",
+      "default": "mcp-admit.release-check.v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "tool_version": {
+      "default": "0.3.0",
+      "title": "Tool Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "items"
+  ],
+  "title": "MCP Admit Release Check",
+  "type": "object"
+}

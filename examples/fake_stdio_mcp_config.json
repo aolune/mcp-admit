@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "fake-safe": {
+      "transport": "stdio",
+      "command": "python3",
+      "args": ["examples/fake_stdio_mcp_server.py"]
+    }
+  }
+}
