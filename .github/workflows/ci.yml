@@ -11,8 +11,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-      - uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
       - run: uv sync --extra dev || pip install -e ".[dev]"
       - run: uv run mcp-admit --version
       - run: uv run mcp-admit schema admission
@@ -27,7 +27,7 @@ jobs:
       - run: uv run --extra dev ruff check .
       - run: uv run --extra dev pytest
       - run: uv build
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
           name: mcp-admit-dist
@@ -40,8 +40,8 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-      - uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
       - run: uv sync --extra dev || pip install -e ".[dev]"
       - run: uv run python -m mcp_admit scan examples/safe_mcp_config.json --format json --fail-on high --out mcp-admit-report.json
       - run: uv run python -m mcp_admit scan examples/poisoned_tool_manifest.json --format sarif --out mcp-admit-report.sarif
@@ -58,7 +58,7 @@ jobs:
         with:
           sarif_file: mcp-admit-report.sarif
           category: mcp-admit-demo
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
           name: mcp-admit-reports
